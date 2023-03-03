@@ -36,10 +36,10 @@ const options = [
 ];
 
 function Convert() {
-    const [selectValue, setSelectValue] = useState("");
+    const [selectValue, setSelectValue] = useState("USD");
     const [inputValue, setInputValue] = useState(0);
     const [paragraph, setParagraph] = useState("US$ Dolar Americano");
-    const [paragraphV, setParagraphValue] = useState(2000);
+    const [paragraphV, setParagraphValue] = useState(0);
 
     async function fetchV() {
         try {
@@ -82,21 +82,12 @@ function Convert() {
 
     useEffect(() => {
         async function text() {
-            try {
-                if (!inputValue) throw new Error("paragráfo inexistente");
-                let option = options.find(
-                    (option) => option.value === selectValue
-                );
-                await setParagraph(option.name);
-            } catch (err) {
-                console.log(err.message);
-            }
+            let option = options.find((option) => option.value === selectValue);
+            await setParagraph(option.name);
         }
-        if (!selectValue) {
-            return;
-        }
+
         text();
-    }, [inputValue, selectValue]);
+    }, [selectValue]);
     return (
         <Container>
             <ContainerItens>
