@@ -87,7 +87,7 @@ function Convert() {
         }
 
         text();
-    }, [selectValue]);
+    }, [inputValue, selectValue]);
     return (
         <Container>
             <ContainerItens>
