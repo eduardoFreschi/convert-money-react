@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Bg from "./assets/bg.jpg";
+import Bg from "./assets/bgimage.jpg";
 
 export const Container = styled.div`
     height: 100vh;
@@ -8,7 +8,8 @@ export const Container = styled.div`
     justify-content: center;
     align-items: center;
     background: url("${Bg}");
-    background-size: contain;
+    background-size: cover;
+    background-repeat: no-repeat;
 `;
 
 export const Header = styled.header`

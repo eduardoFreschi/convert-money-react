@@ -36,10 +36,10 @@ const options = [
 ];
 
 function Convert() {
-    const [selectValue, setSelectValue] = useState("");
+    const [selectValue, setSelectValue] = useState("USD");
     const [inputValue, setInputValue] = useState(0);
     const [paragraph, setParagraph] = useState("US$ Dolar Americano");
-    const [paragraphV, setParagraphValue] = useState(2000);
+    const [paragraphV, setParagraphValue] = useState(0);
 
     async function fetchV() {
         try {
@@ -96,7 +96,7 @@ function Convert() {
             return;
         }
         text();
-    }, [inputValue, selectValue]);
+    }, [inputValue, selectValue, paragraphV]);
     return (
         <Container>
             <ContainerItens>
