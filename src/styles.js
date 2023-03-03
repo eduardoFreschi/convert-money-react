@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Bg from "./assets/bg.jpg";
 
 export const Container = styled.div`
     height: 100vh;
@@ -6,13 +7,14 @@ export const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #c0c0c0;
+    background: url("${Bg}");
+    background-size: contain;
 `;
 
 export const Header = styled.header`
     width: 100%;
     height: 66px;
-    background: #32cd32;
+    background: #1e90ff;
     display: flex;
     align-items: center;
     justify-content: center;

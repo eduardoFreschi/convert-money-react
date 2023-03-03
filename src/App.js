@@ -39,32 +39,39 @@ function Convert() {
     const [selectValue, setSelectValue] = useState("");
     const [inputValue, setInputValue] = useState(0);
     const [paragraph, setParagraph] = useState("US$ Dolar Americano");
-    const [paragraphValue, setParagraphValue] = useState("US$ 2.000,00");
+    const [paragraphV, setParagraphValue] = useState(2000);
 
-    async function data() {
-        if (!selectValue || !inputRef.current.value) {
-            alert("valor do select e input indefinido");
-            return;
+    async function fetchV() {
+        try {
+            // const data = await axios({
+            //     method: "get",
+            //     url: `https://api.api-ninjas.com/v1/convertcurrency?want=${selectValue}&have=BRL&amount=${inputRef.current.value}`,
+            //     responseType: "stream",
+            // })
+            //     .then((response) => console.log(response))
+            //     .catch((err) => console.log(err));
+            if (!inputValue || !selectValue) {
+                throw new Error("sem conteudo");
+            }
+            await axios({
+                method: "get",
+                url: `https://economia.awesomeapi.com.br/last/${selectValue}-BRL`,
+            })
+                .then((response) => response.data)
+                .then((data) => data[`${selectValue}BRL`]["bid"])
+                .then((bid) => bid * inputValue)
+                .then((value) => setParagraphValue(value));
+        } catch (err) {
+            console.log(err.message);
         }
-        const { data } = await axios.get(
-            `https://api.api-ninjas.com/v1/convertcurrency?want=${selectValue}&have=BRL&amount=${inputRef.current.value}`
-        );
-        console.log(selectValue);
-        console.log(data.new_amount);
-        console.log(inputRef.current.value);
-        setParagraphValue(data.new_amount);
-        return data;
+    }
+    function data() {
+        fetchV();
     }
 
     async function verifySelect(e) {
         setSelectValue(e.target.value);
-        // console.log(selectValue);
-        if (!selectValue || !inputValue) {
-            return;
-        }
-        let { new_amount: dados } = await data();
-        // console.log(dados);
-        setParagraphValue(dados);
+        fetchV();
     }
 
     function verifyInput(e) {
@@ -75,14 +82,21 @@ function Convert() {
 
     useEffect(() => {
         async function text() {
-            let option = options.find((option) => option.value === selectValue);
-            await setParagraph(option.name);
+            try {
+                if (!inputValue) throw new Error("paragráfo inexistente");
+                let option = options.find(
+                    (option) => option.value === selectValue
+                );
+                await setParagraph(option.name);
+            } catch (err) {
+                console.log(err.message);
+            }
         }
         if (!selectValue) {
             return;
         }
         text();
-    }, [selectValue]);
+    }, [inputValue, selectValue]);
     return (
         <Container>
             <ContainerItens>
@@ -125,9 +139,14 @@ function Convert() {
                             }).format(inputValue)}
                         </ParagraphValue>
                         <img src={Vector} alt="seta"></img>
-                        <ImageCountry contry={selectValue} />
+                        <ImageCountry country={selectValue} />
                         <Paragraph>{paragraph}</Paragraph>
-                        <ParagraphValue>{paragraphValue}</ParagraphValue>
+                        <ParagraphValue>
+                            {new Intl.NumberFormat("pt-BR", {
+                                style: "currency",
+                                currency: `${selectValue}`,
+                            }).format(paragraphV)}
+                        </ParagraphValue>
                     </DivContent>
                 </DivConvert>
             </ContainerItens>
